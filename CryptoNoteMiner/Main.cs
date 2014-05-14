@@ -172,7 +172,8 @@ namespace CryptoNoteMiner
                 if (minerProcesses.Count == 0)
                 {
                     _syncContext.Post(_ => {
-                        buttonStartMining.PerformClick();
+                        if (buttonStartMining.Text != miningBtnStart)
+                            buttonStartMining.PerformClick();
                     }, null);
                 }
             };
