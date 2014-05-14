@@ -60,7 +60,7 @@ namespace CryptoNoteMiner
 
             if (!File.Exists(walletPath))
             {
-                MessageBox.Show("Generating new wallet");
+                MessageBox.Show("Generating new wallet with the password: x");
                 GenerateWallet();
             }
             else
@@ -83,6 +83,7 @@ namespace CryptoNoteMiner
                 int coresParsed;
                 var parsed = int.TryParse(coresConfig, out coresParsed);
                 if (parsed) coresInt = coresParsed - 1;
+                if (coresInt+1 > coresAvailable) coresInt = coresAvailable - 1;
 
             }
             comboBoxCores.SelectedIndex = coresInt;
