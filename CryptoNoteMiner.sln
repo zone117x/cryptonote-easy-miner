@@ -5,11 +5,6 @@ VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryptoNoteMiner", "CryptoNoteMiner\CryptoNoteMiner.csproj", "{8047E257-DE3D-4C2A-8498-6FD586D7053D}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{24A6D0D0-9E83-474A-8051-27B91C5868BF}"
-	ProjectSection(SolutionItems) = preProject
-		CryptoNoteMiner\bin\Release\cryptnote-easy-miner-latest.zip = CryptoNoteMiner\bin\Release\cryptnote-easy-miner-latest.zip
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
