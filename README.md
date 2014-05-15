@@ -12,4 +12,4 @@ The app will spawn instances of simpleminer for each core with the approperiate 
 
 ####Download
 
-This repo contains the compiled and zipped latest version of this app: [CryptoNoteMiner/bin/Release](CryptoNoteMiner/bin/Release)
+Get the latest build here: [releases](//github.com/zone117x/cryptonote-easy-miner/releases)
