@@ -30,6 +30,10 @@ namespace CryptoNoteMiner
 
         SynchronizationContext _syncContext;
 
+        [DllImport("user32.dll", SetLastError = true)]
+        private static extern bool MoveWindow(IntPtr hwnd, int x, int y, int cx, int cy, bool repaint);
+        [DllImport("user32.dll", SetLastError = true)]
+        static extern IntPtr SetParent(IntPtr hWndChild, IntPtr hWndNewParent);
 
         public Main()
         {
@@ -180,6 +184,15 @@ namespace CryptoNoteMiner
             //process.OutputDataReceived += (s, a) => Log(a.Data);
 
             process.Start();
+            
+            IntPtr ptr = IntPtr.Zero;
+            while ((ptr = process.MainWindowHandle) == IntPtr.Zero || process.HasExited) ;
+
+            int offset = core * 7;
+
+            SetParent(process.MainWindowHandle, panel1.Handle);
+            MoveWindow(process.MainWindowHandle, offset, offset, panel1.Width + offset, panel1.Height - 50 + offset, true);
+
             Log("Miner started on core " + core);
             //process.BeginOutputReadLine();
             //process.BeginErrorReadLine();

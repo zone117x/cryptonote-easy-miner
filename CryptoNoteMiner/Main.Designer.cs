@@ -38,6 +38,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.textBoxPoolPort = new System.Windows.Forms.TextBox();
+            this.panel1 = new System.Windows.Forms.Panel();
             this.SuspendLayout();
             // 
             // label1
@@ -58,7 +59,7 @@
             this.textBoxAddress.Location = new System.Drawing.Point(120, 16);
             this.textBoxAddress.Name = "textBoxAddress";
             this.textBoxAddress.ReadOnly = true;
-            this.textBoxAddress.Size = new System.Drawing.Size(443, 18);
+            this.textBoxAddress.Size = new System.Drawing.Size(689, 18);
             this.textBoxAddress.TabIndex = 1;
             // 
             // comboBoxCores
@@ -92,15 +93,14 @@
             // 
             // textBoxLog
             // 
-            this.textBoxLog.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.textBoxLog.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxLog.Location = new System.Drawing.Point(16, 143);
+            this.textBoxLog.Location = new System.Drawing.Point(12, 143);
             this.textBoxLog.Multiline = true;
             this.textBoxLog.Name = "textBoxLog";
             this.textBoxLog.ReadOnly = true;
             this.textBoxLog.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBoxLog.Size = new System.Drawing.Size(547, 268);
+            this.textBoxLog.Size = new System.Drawing.Size(797, 65);
             this.textBoxLog.TabIndex = 5;
             // 
             // textBoxPoolHost
@@ -110,7 +110,7 @@
             this.textBoxPoolHost.Font = new System.Drawing.Font("Lucida Console", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxPoolHost.Location = new System.Drawing.Point(120, 57);
             this.textBoxPoolHost.Name = "textBoxPoolHost";
-            this.textBoxPoolHost.Size = new System.Drawing.Size(289, 21);
+            this.textBoxPoolHost.Size = new System.Drawing.Size(535, 21);
             this.textBoxPoolHost.TabIndex = 7;
             // 
             // label3
@@ -128,7 +128,7 @@
             this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(426, 58);
+            this.label4.Location = new System.Drawing.Point(672, 58);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(70, 17);
             this.label4.TabIndex = 8;
@@ -138,16 +138,28 @@
             // 
             this.textBoxPoolPort.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxPoolPort.Font = new System.Drawing.Font("Lucida Console", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxPoolPort.Location = new System.Drawing.Point(502, 57);
+            this.textBoxPoolPort.Location = new System.Drawing.Point(748, 57);
             this.textBoxPoolPort.Name = "textBoxPoolPort";
             this.textBoxPoolPort.Size = new System.Drawing.Size(61, 21);
             this.textBoxPoolPort.TabIndex = 9;
+            // 
+            // panel1
+            // 
+            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panel1.Location = new System.Drawing.Point(12, 214);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(797, 356);
+            this.panel1.TabIndex = 10;
             // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(575, 423);
+            this.ClientSize = new System.Drawing.Size(821, 582);
+            this.Controls.Add(this.panel1);
             this.Controls.Add(this.textBoxPoolPort);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.textBoxPoolHost);
@@ -178,6 +190,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox textBoxPoolPort;
+        private System.Windows.Forms.Panel panel1;
     }
 }
 
