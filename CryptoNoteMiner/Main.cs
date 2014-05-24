@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -18,8 +19,9 @@ namespace CryptoNoteMiner
     {
         bool platform64bit;
 
-        string simpleminerPath;
         string simplewalletPath;
+        string cpuminerPath;
+
         string walletPath;
         string address;
 
@@ -46,20 +48,23 @@ namespace CryptoNoteMiner
 
             platform64bit = ArchitectureCheck.Is64Bit();
 
-            string platformString = platform64bit ? "64" : "32";
+            string platformString = platform64bit ? "64bit" : "32bit";
 
-            simpleminerPath = AppDomain.CurrentDomain.BaseDirectory + @"Binaries\" + platformString + @"\simpleminer.exe";
-            simplewalletPath = AppDomain.CurrentDomain.BaseDirectory + @"Binaries\" + platformString + @"\simplewallet.exe";
+            simplewalletPath = AppDomain.CurrentDomain.BaseDirectory + @"binaries\simplewallet\" + platformString + @"\simplewallet.exe";
+            cpuminerPath = AppDomain.CurrentDomain.BaseDirectory + @"binaries\cpuminer\" + platformString + @"\minerd.exe";
 
             walletPath = AppDomain.CurrentDomain.BaseDirectory + @"wallet.address.txt";
 
-            if (!File.Exists(simpleminerPath))
-            {
-                MessageBox.Show("Missing " + simpleminerPath);
-            }
             if (!File.Exists(simplewalletPath))
             {
                 MessageBox.Show("Missing " + simplewalletPath);
+                Process.GetCurrentProcess().Kill();
+            }
+
+            if (!File.Exists(cpuminerPath))
+            {
+                MessageBox.Show("Missing " + cpuminerPath);
+                Process.GetCurrentProcess().Kill();
             }
 
             if (!File.Exists(walletPath))
@@ -144,34 +149,32 @@ namespace CryptoNoteMiner
 
         void startMiningProcesses()
         {
-            var args = String.Join(" ", new[] { 
-                "--pool-addr=" + textBoxPoolHost.Text + ':' + textBoxPoolPort.Text,
-                "--login=" + address,
-                "--pass=x"
+            var args = new ArrayList(new[] { 
+                "-a cryptonight",
+                "-o stratum+tcp://" + textBoxPoolHost.Text + ':' + textBoxPoolPort.Text,
+                "-u " + address,
+                "-p x"
             });
             var cores = comboBoxCores.SelectedIndex + 1;
-            for (var i = 0; i < cores; i++)
+            if (cores != comboBoxCores.Items.Count)
             {
-                startMiningProcess(args, i + 1);
+                args.Add("-t " + cores);
             }
+
+            startMiningProcess((string[])args.ToArray(typeof(string)), cores);
+            
         }
 
-        async Task startMiningProcess(string args, int core)
+        void startMiningProcess(string[] args, int cores)
         {
-            ProcessStartInfo startInfo = new ProcessStartInfo(simpleminerPath, String.Join(" ", args));
-            //startInfo.UseShellExecute = false;
-            //startInfo.RedirectStandardOutput = true;
-            //startInfo.RedirectStandardError = true;
-            //startInfo.CreateNoWindow = true;
-            //startInfo.WindowStyle = ProcessWindowStyle.Hidden;
-
+            ProcessStartInfo startInfo = new ProcessStartInfo(cpuminerPath, String.Join(" ", args));
 
             Process process = new Process();
             minerProcesses.Add(process);
             process.StartInfo = startInfo;
             process.EnableRaisingEvents = true;
             process.Exited += (s, e) => {
-                Log("Miner on core " + core + " died");
+                Log("Miner died");
                 minerProcesses.Remove(process);
                 if (minerProcesses.Count == 0)
                 {
@@ -181,22 +184,16 @@ namespace CryptoNoteMiner
                     }, null);
                 }
             };
-            //process.OutputDataReceived += (s, a) => Log(a.Data);
 
             process.Start();
             
             IntPtr ptr = IntPtr.Zero;
             while ((ptr = process.MainWindowHandle) == IntPtr.Zero || process.HasExited) ;
 
-            int offset = core * 7;
-
             SetParent(process.MainWindowHandle, panel1.Handle);
-            MoveWindow(process.MainWindowHandle, offset, offset, panel1.Width + offset, panel1.Height - 50 + offset, true);
+            MoveWindow(process.MainWindowHandle, 0, 0, panel1.Width, panel1.Height - 20, true);
 
-            Log("Miner started on core " + core);
-            //process.BeginOutputReadLine();
-            //process.BeginErrorReadLine();
-            //process.WaitForExit();
+            Log("Miner started on " + cores + " cores");
         }
 
 
@@ -223,7 +220,8 @@ namespace CryptoNoteMiner
         {
             foreach (Process process in minerProcesses)
             {
-                process.Kill();
+                if (!process.HasExited)
+                    process.Kill();
             }
             minerProcesses.Clear();
         }
