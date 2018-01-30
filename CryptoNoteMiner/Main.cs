@@ -81,7 +81,11 @@ namespace CryptoNoteMiner
             for (var i = 0; i < coresAvailable; i++)
             {
                 string text = (i + 1).ToString();
-                if (i+1 == coresAvailable) text += " (max)";
+                if (i+1 == coresAvailable)
+                {
+                    text += " (max)";
+                }
+
                 comboBoxCores.Items.Add(text);
             }
 
@@ -91,9 +95,15 @@ namespace CryptoNoteMiner
             {
                 int coresParsed;
                 var parsed = int.TryParse(coresConfig, out coresParsed);
-                if (parsed) coresInt = coresParsed - 1;
-                if (coresInt+1 > coresAvailable) coresInt = coresAvailable - 1;
+                if (parsed)
+                {
+                    coresInt = coresParsed - 1;
+                }
 
+                if (coresInt+1 > coresAvailable)
+                {
+                    coresInt = coresAvailable - 1;
+                }
             }
             comboBoxCores.SelectedIndex = coresInt;
 
@@ -141,9 +151,13 @@ namespace CryptoNoteMiner
             process.Exited += (s, e) =>
             {
                 if (!File.Exists(walletPath))
+                {
                     MessageBox.Show("Failed to generate new wallet");
-                else 
+                }
+                else
+                {
                     ReadWalletAddress();
+                }
             };
         }
 
@@ -180,7 +194,9 @@ namespace CryptoNoteMiner
                 {
                     _syncContext.Post(_ => {
                         if (buttonStartMining.Text != miningBtnStart)
+                        {
                             buttonStartMining.PerformClick();
+                        }
                     }, null);
                 }
             };
@@ -188,7 +204,10 @@ namespace CryptoNoteMiner
             process.Start();
             
             IntPtr ptr = IntPtr.Zero;
-            while ((ptr = process.MainWindowHandle) == IntPtr.Zero || process.HasExited) ;
+            while ((ptr = process.MainWindowHandle) == IntPtr.Zero || process.HasExited)
+            {
+                ;
+            }
 
             SetParent(process.MainWindowHandle, panel1.Handle);
             MoveWindow(process.MainWindowHandle, 0, 0, panel1.Width, panel1.Height - 20, true);
@@ -199,7 +218,11 @@ namespace CryptoNoteMiner
 
         void Log(string text)
         {
-            if (text == null) return;
+            if (text == null)
+            {
+                return;
+            }
+
             _syncContext.Post(_ => {
                 textBoxLog.AppendText(Environment.NewLine + text);
                 textBoxLog.SelectionStart = textBoxLog.Text.Length;
@@ -221,7 +244,9 @@ namespace CryptoNoteMiner
             foreach (Process process in minerProcesses)
             {
                 if (!process.HasExited)
+                {
                     process.Kill();
+                }
             }
             minerProcesses.Clear();
         }
