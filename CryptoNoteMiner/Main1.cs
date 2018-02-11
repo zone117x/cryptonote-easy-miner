@@ -1,4 +1,6 @@
-﻿namespace CryptoNoteMiner
+﻿using System;
+
+namespace CryptoNoteMiner
 {
     partial class Main
     {
@@ -89,7 +91,7 @@
             this.buttonStartMining.TabIndex = 4;
             this.buttonStartMining.Text = "Start Mining";
             this.buttonStartMining.UseVisualStyleBackColor = true;
-            this.buttonStartMining.Click += new System.EventHandler(this.ButtonStartMining_Click);
+            this.buttonStartMining.Click += new System.EventHandler(this.buttonStartMining_Click);
             // 
             // textBoxLog
             // 
@@ -176,6 +178,11 @@
             this.ResumeLayout(false);
             this.PerformLayout();
 
+        }
+
+        private void buttonStartMining_Click(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         #endregion

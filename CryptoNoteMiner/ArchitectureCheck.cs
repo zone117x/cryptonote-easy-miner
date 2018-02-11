@@ -12,8 +12,8 @@ namespace CryptoNoteMiner
     {
         public static bool Is64Bit()
         {
-            bool is64BitProcess = (IntPtr.Size == 8);
-            bool is64BitOperatingSystem = is64BitProcess || InternalCheckIsWow64();
+            var is64BitProcess = (IntPtr.Size == 0x8);
+            var is64BitOperatingSystem = is64BitProcess || InternalCheckIsWow64();
             return is64BitOperatingSystem;
         }
 
@@ -28,13 +28,12 @@ namespace CryptoNoteMiner
 
         static bool InternalCheckIsWow64()
         {
-            if ((Environment.OSVersion.Version.Major == 5 && Environment.OSVersion.Version.Minor >= 1) ||
+            if ((Environment.OSVersion.Version.Major == 5&& Environment.OSVersion.Version.Minor >= 1) ||
                 Environment.OSVersion.Version.Major >= 6)
             {
                 using (Process p = Process.GetCurrentProcess())
                 {
-                    bool retVal;
-                    if (!IsWow64Process(p.Handle, out retVal))
+                    if (!IsWow64Process(p.Handle, out bool retVal))
                     {
                         return false;
                     }

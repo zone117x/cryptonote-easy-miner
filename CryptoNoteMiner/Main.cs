@@ -17,7 +17,7 @@ namespace CryptoNoteMiner
 {
     public partial class Main : Form
     {
-        bool platform64bit;
+        readonly bool platform64bit;
 
         string simplewalletPath;
         string cpuminerPath;
@@ -25,12 +25,12 @@ namespace CryptoNoteMiner
         string walletPath;
         string address;
 
-        List<Process> minerProcesses = new List<Process>();
+        readonly List<Process> minerProcesses = new List<Process>();
 
-        string miningBtnStart;
-        string miningBtnStop;
+        readonly string miningBtnStart;
+        readonly string miningBtnStop;
 
-        SynchronizationContext _syncContext;
+        readonly SynchronizationContext _syncContext;
 
         [DllImport("user32.dll", SetLastError = true)]
         private static extern bool MoveWindow(IntPtr hwnd, int x, int y, int cx, int cy, bool repaint);
@@ -81,19 +81,28 @@ namespace CryptoNoteMiner
             for (var i = 0; i < coresAvailable; i++)
             {
                 string text = (i + 1).ToString();
-                if (i+1 == coresAvailable) text += " (max)";
+                if (i+1== coresAvailable)
+                {
+                    text += " (max)";
+                }
+
                 comboBoxCores.Items.Add(text);
             }
 
             var coresConfig = INI.Value("cores");
-            int coresInt = comboBoxCores.Items.Count - 1;
+            var coresInt = comboBoxCores.Items.Count - 1;
             if (coresConfig != "")
             {
-                int coresParsed;
-                var parsed = int.TryParse(coresConfig, out coresParsed);
-                if (parsed) coresInt = coresParsed - 1;
-                if (coresInt+1 > coresAvailable) coresInt = coresAvailable - 1;
+                var parsed = int.TryParse(coresConfig, out int coresParsed);
+                if (parsed)
+                {
+                    coresInt = coresParsed - 1;
+                }
 
+                if (coresInt+1> coresAvailable)
+                {
+                    coresInt = coresAvailable - 1;
+                }
             }
             comboBoxCores.SelectedIndex = coresInt;
 
@@ -107,7 +116,7 @@ namespace CryptoNoteMiner
                 textBoxPoolPort.Text = poolPort;
             }
 
-            Application.ApplicationExit += (s, e) => killMiners();
+            Application.ApplicationExit += (s, e) => KillMiners();
 
         }
 
@@ -118,13 +127,13 @@ namespace CryptoNoteMiner
             {
                 textBoxAddress.Text = address;
             }, null);
-            
+
         }
 
         void GenerateWallet()
         {
-            var args = new [] { 
-                "--generate-new-wallet=\"" + AppDomain.CurrentDomain.BaseDirectory + "wallet\"", 
+            var args = new [] {
+                "--generate-new-wallet=\"" + AppDomain.CurrentDomain.BaseDirectory + "wallet\"",
                 "--password=x"
             };
             Console.WriteLine(String.Join(" ", args));
@@ -141,15 +150,19 @@ namespace CryptoNoteMiner
             process.Exited += (s, e) =>
             {
                 if (!File.Exists(walletPath))
+                {
                     MessageBox.Show("Failed to generate new wallet");
-                else 
+                }
+                else
+                {
                     ReadWalletAddress();
+                }
             };
         }
 
-        void startMiningProcesses()
+        void StartMiningProcesses()
         {
-            var args = new ArrayList(new[] { 
+            var args = new ArrayList(new[] {
                 "-a cryptonight",
                 "-o stratum+tcp://" + textBoxPoolHost.Text + ':' + textBoxPoolPort.Text,
                 "-u " + address,
@@ -161,16 +174,15 @@ namespace CryptoNoteMiner
                 args.Add("-t " + cores);
             }
 
-            startMiningProcess((string[])args.ToArray(typeof(string)), cores);
-            
+            StartMiningProcess((string[])args.ToArray(typeof(string)), cores);
+
         }
 
-        void startMiningProcess(string[] args, int cores)
+        void StartMiningProcess(string[] args, int cores)
         {
-            ProcessStartInfo startInfo = new ProcessStartInfo(cpuminerPath, String.Join(" ", args));
-
             Process process = new Process();
             minerProcesses.Add(process);
+            ProcessStartInfo startInfo = new ProcessStartInfo(cpuminerPath, string.Join(" ", args));
             process.StartInfo = startInfo;
             process.EnableRaisingEvents = true;
             process.Exited += (s, e) => {
@@ -180,15 +192,20 @@ namespace CryptoNoteMiner
                 {
                     _syncContext.Post(_ => {
                         if (buttonStartMining.Text != miningBtnStart)
+                        {
                             buttonStartMining.PerformClick();
+                        }
                     }, null);
                 }
             };
 
             process.Start();
-            
-            IntPtr ptr = IntPtr.Zero;
-            while ((ptr = process.MainWindowHandle) == IntPtr.Zero || process.HasExited) ;
+
+            var ptr = IntPtr.Zero;
+            while ((ptr = process.MainWindowHandle) == IntPtr.Zero || process.HasExited)
+            {
+                ;
+            }
 
             SetParent(process.MainWindowHandle, panel1.Handle);
             MoveWindow(process.MainWindowHandle, 0, 0, panel1.Width, panel1.Height - 20, true);
@@ -199,7 +216,11 @@ namespace CryptoNoteMiner
 
         void Log(string text)
         {
-            if (text == null) return;
+            if (text == null)
+            {
+                return;
+            }
+
             _syncContext.Post(_ => {
                 textBoxLog.AppendText(Environment.NewLine + text);
                 textBoxLog.SelectionStart = textBoxLog.Text.Length;
@@ -216,30 +237,32 @@ namespace CryptoNoteMiner
             );
         }
 
-        void killMiners()
+        void KillMiners()
         {
             foreach (Process process in minerProcesses)
             {
                 if (!process.HasExited)
+                {
                     process.Kill();
+                }
             }
             minerProcesses.Clear();
         }
 
-        private void buttonStartMining_Click(object sender, EventArgs e)
+        private void ButtonStartMining_Click(object sender, EventArgs e)
         {
             if (buttonStartMining.Text == miningBtnStart)
             {
                 SaveINI();
                 buttonStartMining.Text = miningBtnStop;
                 textBoxPoolHost.Enabled = textBoxPoolPort.Enabled = comboBoxCores.Enabled = false;
-                startMiningProcesses();
+                StartMiningProcesses();
             }
             else
             {
                 buttonStartMining.Text = miningBtnStart;
                 textBoxPoolHost.Enabled = textBoxPoolPort.Enabled = comboBoxCores.Enabled = true;
-                killMiners();
+                KillMiners();
             }
         }
 
