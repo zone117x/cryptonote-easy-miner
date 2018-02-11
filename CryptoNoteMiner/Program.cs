@@ -16,7 +16,10 @@ namespace CryptoNoteMiner
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Main());
+            using (var main = new Main())
+            {
+                Application.Run(mainForm: main);
+            }
         }
     }
 }

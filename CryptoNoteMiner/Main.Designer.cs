@@ -89,7 +89,7 @@
             this.buttonStartMining.TabIndex = 4;
             this.buttonStartMining.Text = "Start Mining";
             this.buttonStartMining.UseVisualStyleBackColor = true;
-            this.buttonStartMining.Click += new System.EventHandler(this.buttonStartMining_Click);
+            this.buttonStartMining.Click += new System.EventHandler(this.ButtonStartMining_Click);
             // 
             // textBoxLog
             // 

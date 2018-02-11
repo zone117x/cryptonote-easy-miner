@@ -22,7 +22,7 @@ namespace CryptoNoteMiner
         public static void Config(params string[] keyValues)
         {
 
-            if (keyValues.Length % 2 != 0)
+            if (keyValues.Length % 2!= 0)
             {
                 throw new ArgumentException("Must be even number of arguments as [key, value, key, value]");
             }

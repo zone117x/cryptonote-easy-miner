@@ -83,6 +83,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArchitectureCheck.cs" />
+    <Compile Include="GlobalSuppressions2.cs" />
     <Compile Include="INI.cs" />
     <Compile Include="Main.cs">
       <SubType>Form</SubType>
